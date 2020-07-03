@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { FingerprintOptions} from '@ionic-native/fingerprint-aio';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 
 @Component({
   selector: 'app-home',
@@ -8,29 +8,39 @@ import { FingerprintOptions} from '@ionic-native/fingerprint-aio';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-
-  fingerprintOptions : FingerprintOptions;
-
   constructor(
     public navCtrl: NavController,
-    public fingerAuth: FingerprintAIO
+    private faio: FingerprintAIO
   ){  }
 
   ngOnInit() {
   }
 
-  public showFingerprintAuthDlg(){
-      this.fingerprintOptions = {
-          clientId:'fingerprint-demo',
-          clientSecret: 'password',
-          disableBackup: true
-      }
-      this.fingerAuth.isAvailable().then(result =>{
-        if(result === "OK"){
-            this.fingerAuth.show(this.fingerprintOptions)
-            .then((result: any) => console.log(result))
-            .catch((error: any) => console.log(error));
-        }
+  public showFingerprintAuthDlg() {
+
+    this.faio.isAvailable().then((result: any) => {
+      console.log(result)
+
+      this.faio.show({
+        cancelButtonTitle: 'Cancel',
+        description: "Some biometric description",
+        disableBackup: true,
+        title: 'Scanner Title',
+        fallbackButtonTitle: 'FB Back Button',
+        subtitle: 'This SubTitle'
+      })
+        .then((result: any) => {
+          console.log(result)
+          alert("Successfully Authenticated!")
+        })
+        .catch((error: any) => {
+          console.log(error)
+          alert("Match not found!")
+        });
+
+    })
+      .catch((error: any) => {
+        console.log(error)
       });
   }
 
