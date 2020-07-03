@@ -1,5 +1,7 @@
 {
   "name": "fingerprint",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
